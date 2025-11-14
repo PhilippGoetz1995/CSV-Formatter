@@ -37,7 +37,9 @@ def address_to_iso_3166_2_opencage(address: str) -> Optional[str]:
 
     iso3166_2 = comp.get("ISO_3166-2")
 
-    if isinstance(iso3166_2, list) and len(iso3166_2) > 0:
+    return results[0]
+
+    """ if isinstance(iso3166_2, list) and len(iso3166_2) > 0:
         # Return the first subdivision code (e.g., 'US-CA')
         return iso3166_2[0]
     elif isinstance(iso3166_2, str) and iso3166_2:
@@ -48,7 +50,7 @@ def address_to_iso_3166_2_opencage(address: str) -> Optional[str]:
     if country_code:
         return country_code.upper()
 
-    return None
+    return None """
 
 
 
@@ -117,7 +119,7 @@ if uploaded_file is not None:
         df_clean = df.copy()
 
         # For the selected address column, add a new column with ISO 3166-2 code
-        if address_columns:
+        """ if address_columns:
             new_iso_col = f"{address_columns}_iso_3166_2"
             # Insert the new column immediately after the address column
             col_idx = df_clean.columns.get_loc(address_columns)
@@ -136,8 +138,13 @@ if uploaded_file is not None:
                         progress_bar.progress((idx + 1) / total)
                 progress_bar.empty()  # Remove progress bar
             # Insert the new column
-            df_clean.insert(col_idx + 1, new_iso_col, iso_codes)
+            df_clean.insert(col_idx + 1, new_iso_col, iso_codes) """
 
+        test_address1 = "Angelika-Walter-Weg 17, 15720 Nordhausen"
+        test_address2 = "Jockelweg 1, 39088 Kronach"
+
+        result1 = address_to_iso_3166_2_opencage(test_address1)
+        result2 = address_to_iso_3166_2_opencage(test_address2)
             
         
 
