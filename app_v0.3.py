@@ -60,5 +60,16 @@ if uploaded_file is not None:
     )
 
 
+
+    st.write("---")
+
+    if st.button("🚀 Apply transformations & generate cleaned CSV"):
+
+        # First just copy dataframe into a new one to avoid modifying the original
+        df_clean = df.copy()
+
+        # Add a new column with ascending numbers starting from 1
+        df_clean['AscendingNumber'] = range(1, len(df_clean) + 1)
+
 else:
     st.info("Please upload a CSV file to get started.")
