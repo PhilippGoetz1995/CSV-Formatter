@@ -130,6 +130,14 @@ if uploaded_file is not None:
 
         st.write(f"JSON: {outPutAdress.raw}")
 
+        test_address = "Mitterfeldstr. 3 Petershausen"
+
+        outPutAdress = address_to_iso_subdivision(test_address)
+
+        st.write(f"Object: {outPutAdress}")
+
+        st.write(f"JSON: {outPutAdress.raw}")
+
         st.success("✅ Transformations applied successfully!")
 
         st.subheader("Preview of cleaned data")
