@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 from io import StringIO
+from typing import Optional
 
 try:
     from geopy.geocoders import Nominatim
