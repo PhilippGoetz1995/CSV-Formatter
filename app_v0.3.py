@@ -71,5 +71,28 @@ if uploaded_file is not None:
         # Add a new column with ascending numbers starting from 1
         df_clean['AscendingNumber'] = range(1, len(df_clean) + 1)
 
+        st.success("✅ Transformations applied successfully!")
+
+        st.subheader("Preview of cleaned data")
+        st.dataframe(df_clean.head())
+
+        """
+        This section converts the cleaned DataFrame to a CSV buffer for download.
+        1. Create a StringIO object to hold the CSV data => to not store it on the disk
+        2. Convert the DataFrame to CSV using the selected delimiter
+        3. Encode the CSV data to UTF-8
+        4. Create a download button that allows the user to download the cleaned CSV
+        """
+        csv_buffer = StringIO()
+        df_clean.to_csv(csv_buffer, index=False, sep=delimiter)
+        csv_bytes = csv_buffer.getvalue().encode("utf-8")
+
+        st.download_button(
+            label="⬇️ Download cleaned CSV",
+            data=csv_bytes,
+            file_name="cleaned_cleaned.csv",
+            mime="text/csv",
+        )
+
 else:
     st.info("Please upload a CSV file to get started.")
