@@ -1,9 +1,9 @@
-name: Deploy full repo to EC2 (home folder)
+name: Deploy full repo to EC2 (into ~/sapp)
 
 on:
   push:
     branches:
-      - main     # adjust if needed
+      - main  # adjust as needed
 
 jobs:
   deploy:
@@ -25,12 +25,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rsync
 
-      - name: Sync full repo into EC2 home folder
+      - name: Create sapp folder on EC2
         run: |
-          # Remote home directory (no custom path)
-          REMOTE="${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/"
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ~/sapp"
+
+      - name: Sync full repo into ~/sapp
+        run: |
+          REMOTE="${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/sapp"
 
           rsync -avz --delete \
             --exclude ".git" \
             --exclude ".github" \
-            ./ "$REMOTE"
+            ./ "$REMOTE/"
