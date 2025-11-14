@@ -5,10 +5,57 @@ from io import StringIO
 
 try:
     from geopy.geocoders import Nominatim
+    from geopy.extra.rate_limiter import RateLimiter
     from geopy.exc import GeocoderTimedOut, GeocoderServiceError
     GEOPY_AVAILABLE = True
+
+    # Initialize geocoder with rate limiting# Set up geocoder with rate limiting
+    geolocator = Nominatim(user_agent="csv-formatter-app")
+    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
 except ImportError:
     GEOPY_AVAILABLE = False
+
+# ------------------ Address Handling ------------------ #
+
+# Function return string or return None if address is not valid
+def address_to_iso_subdivision(address: str) -> str | None:
+    
+    # Standard Panda Function to check if the address is "NaN or None"
+    if pd.isna(address):
+        return None
+
+    # Convert the address to a string and remove any whitespace
+    addr_str = str(address).strip()
+    if not addr_str:
+        return None
+
+    try:
+        location = geocode(addr_str)
+
+        # If the location is not found, return None
+        if not location:
+            return None
+
+        return location
+
+        """ addr = location.raw.get("address", {})
+
+        # 1) Look for any ISO3166-2* field (works for all countries Nominatim supports)
+        for key, value in addr.items():
+            if key.lower().startswith("iso3166-2") and value:
+                return value
+
+        # 2) Fallback: just return 2-letter country code (not 3166-2, but still useful)
+        country_code = addr.get("country_code")
+        if country_code:
+            return country_code.upper()
+
+        return None """
+
+    except Exception as e:
+        st.error(f"Error geocoding address: {e}")
+        return None
+
 
 
 
@@ -71,6 +118,14 @@ if uploaded_file is not None:
 
         # Add a new column with ascending numbers starting from 1
         df_clean['AscendingNumber'] = range(1, len(df_clean) + 1)
+
+        # Test function to send a test address to address_to_iso_subdivision
+
+        test_address = "1600 Amphitheatre Parkway, Mountain View, CA"
+
+        outPutAdress = address_to_iso_subdivision(test_address)
+
+        st.write(f"Test address: {outPutAdress}")
 
         st.success("✅ Transformations applied successfully!")
 
