@@ -1,0 +1,36 @@
+name: Deploy full repo to EC2 (home folder)
+
+on:
+  push:
+    branches:
+      - main     # adjust if needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Install rsync
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+
+      - name: Sync full repo into EC2 home folder
+        run: |
+          # Remote home directory (no custom path)
+          REMOTE="${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/"
+
+          rsync -avz --delete \
+            --exclude ".git" \
+            --exclude ".github" \
+            ./ "$REMOTE"
