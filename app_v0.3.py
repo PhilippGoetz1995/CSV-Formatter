@@ -1,6 +1,7 @@
-# Frontend Libraries
+
 import streamlit as st
 import pandas as pd
+from io import StringIO
 
 try:
     from geopy.geocoders import Nominatim
@@ -17,7 +18,7 @@ st.set_page_config(page_title="P-Goetz CSV Cleaner", layout="wide")
 
 st.title("🧹 CSV Cleaner: Dates, Numbers, Phone Numbers & Addresses")
 st.markdown(
-    '<a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/Version-v0.1-blue"></a>',
+    '<a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/Version-v0.2-blue"></a>',
     unsafe_allow_html=True
 )
 st.write(
@@ -76,13 +77,13 @@ if uploaded_file is not None:
         st.subheader("Preview of cleaned data")
         st.dataframe(df_clean.head())
 
-        """
-        This section converts the cleaned DataFrame to a CSV buffer for download.
-        1. Create a StringIO object to hold the CSV data => to not store it on the disk
-        2. Convert the DataFrame to CSV using the selected delimiter
-        3. Encode the CSV data to UTF-8
-        4. Create a download button that allows the user to download the cleaned CSV
-        """
+
+        # ----> This section converts the cleaned DataFrame to a CSV buffer for download.
+        # 1. Create a StringIO object to hold the CSV data => to not store it on the disk
+        # 2. Convert the DataFrame to CSV using the selected delimiter
+        # 3. Encode the CSV data to UTF-8
+        # 4. Create a download button that allows the user to download the cleaned CSV
+
         csv_buffer = StringIO()
         df_clean.to_csv(csv_buffer, index=False, sep=delimiter)
         csv_bytes = csv_buffer.getvalue().encode("utf-8")
