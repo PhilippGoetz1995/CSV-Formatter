@@ -18,7 +18,7 @@ except ImportError:
 # ------------------ Address Handling ------------------ #
 
 # Function return string or return None if address is not valid
-def address_to_iso_subdivision(address: str) -> str | None:
+def address_to_iso_subdivision(address: str) -> Optional[str]:
     
     # Standard Panda Function to check if the address is "NaN or None"
     if pd.isna(address):
