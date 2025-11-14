@@ -16,6 +16,10 @@ except ImportError:
 st.set_page_config(page_title="P-Goetz CSV Cleaner", layout="wide")
 
 st.title("🧹 CSV Cleaner: Dates, Numbers, Phone Numbers & Addresses")
+st.markdown(
+    '<a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/Version-v0.1-blue"></a>',
+    unsafe_allow_html=True
+)
 st.write(
     """
 Upload a CSV, select which columns contain dates, numbers, phone numbers, and addresses,
