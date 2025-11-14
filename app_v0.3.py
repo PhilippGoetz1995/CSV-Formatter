@@ -145,6 +145,9 @@ if uploaded_file is not None:
 
         result1 = address_to_iso_3166_2_opencage(test_address1)
         result2 = address_to_iso_3166_2_opencage(test_address2)
+
+        st.write(test_address1)
+        st.write(test_address2)
             
         
 
