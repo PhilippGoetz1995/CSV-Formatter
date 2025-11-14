@@ -32,23 +32,23 @@ def address_to_iso_3166_2_opencage(address: str) -> Optional[str]:
     if not results:
         return None
 
-    return results[0]
+    # The OpenCage geocoder returns a list of results; each result has a 'components' dict.
+    comp = results[0].get("components", {})
 
-    """ comp = results[0].get("components", {})
+    iso3166_2 = comp.get("ISO_3166-2")
 
-    # Example: ['DE-BY', 'DE'] or ['DE-BE']
-    iso_list = comp.get("ISO_3166-2")
+    if isinstance(iso3166_2, list) and len(iso3166_2) > 0:
+        # Return the first subdivision code (e.g., 'US-CA')
+        return iso3166_2[0]
+    elif isinstance(iso3166_2, str) and iso3166_2:
+        return iso3166_2
 
-    if isinstance(iso_list, list) and len(iso_list) > 0:
-        # Prefer the subdivision code (the one with a dash)
-        for code in iso_list:
-            if "-" in code:
-                return code
-        return iso_list[0]
+    # Fallback: return country code only in ISO 3166-1 alpha-2 (uppercase)
+    country_code = comp.get("country_code")
+    if country_code:
+        return country_code.upper()
 
-    # Fallback: return country code only
-    return comp.get("country_code", "").upper() or None """
-
+    return None
 
 
 
