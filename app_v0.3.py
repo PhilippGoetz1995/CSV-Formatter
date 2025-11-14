@@ -101,6 +101,12 @@ if uploaded_file is not None:
         options=list(df.columns),
     )
 
+    st.write("---")
+    st.subheader("2️⃣ Format Adress to iso_3166 in new Column")
+    address_columns = st.selectbox(
+        "Columns containing Address",
+        options=list(df.columns),
+    )
 
 
     st.write("---")
@@ -110,16 +116,29 @@ if uploaded_file is not None:
         # First just copy dataframe into a new one to avoid modifying the original
         df_clean = df.copy()
 
-        # Add a new column with ascending numbers starting from 1
-        df_clean['AscendingNumber'] = range(1, len(df_clean) + 1)
+        # For the selected address column, add a new column with ISO 3166-2 code
+        if address_columns:
+            new_iso_col = f"{address_columns}_iso_3166_2"
+            # Insert the new column immediately after the address column
+            col_idx = df_clean.columns.get_loc(address_columns)
+            # Show a progress bar while processing rows (loading animation)
+            with st.spinner("Looking up ISO 3166-2 codes..."):
+                iso_codes = []
+                total = len(df_clean)
+                progress_bar = st.progress(0)
+                for idx, addr in enumerate(df_clean[address_columns]):
+                    if pd.notnull(addr) and str(addr).strip():
+                        iso_code = address_to_iso_3166_2_opencage(addr)
+                    else:
+                        iso_code = ""
+                    iso_codes.append(iso_code)
+                    if total > 1:
+                        progress_bar.progress((idx + 1) / total)
+                progress_bar.empty()  # Remove progress bar
+            # Insert the new column
+            df_clean.insert(col_idx + 1, new_iso_col, iso_codes)
 
-        # Test function to send a test address to address_to_iso_subdivision
-
-        test_address = "1600 Amphitheatre Parkway, Mountain View, CA"
-        outPutAdress = address_to_iso_3166_2_opencage(test_address)
-
-        st.write(f"Object: {outPutAdress}")
-
+            
         
 
         st.success("✅ Transformations applied successfully!")
