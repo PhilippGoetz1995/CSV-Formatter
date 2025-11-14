@@ -1,61 +1,54 @@
-
+from dotenv import load_dotenv
+import os
 import streamlit as st
 import pandas as pd
 from io import StringIO
 from typing import Optional
 
-try:
-    from geopy.geocoders import Nominatim
-    from geopy.extra.rate_limiter import RateLimiter
-    from geopy.exc import GeocoderTimedOut, GeocoderServiceError
-    GEOPY_AVAILABLE = True
+# Address Handling
+from opencage.geocoder import OpenCageGeocode
 
-    # Initialize geocoder with rate limiting# Set up geocoder with rate limiting
-    geolocator = Nominatim(user_agent="csv-formatter-app")
-    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-except ImportError:
-    GEOPY_AVAILABLE = False
+load_dotenv()
+OPENCAGE_API_KEY = os.getenv("OPENCAGE_API_KEY")
+
+geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
 
 # ------------------ Address Handling ------------------ #
 
-# Function return string or return None if address is not valid
-def address_to_iso_subdivision(address: str) -> Optional[str]:
-    
-    # Standard Panda Function to check if the address is "NaN or None"
-    if pd.isna(address):
-        return None
-
-    # Convert the address to a string and remove any whitespace
-    addr_str = str(address).strip()
-    if not addr_str:
+def address_to_iso_3166_2_opencage(address: str) -> Optional[str]:
+    """
+    Use OpenCage API to return ISO 3166-2 subdivision code for an address.
+    Falls back to ISO 3166-1 alpha-2 if subdivision is unavailable.
+    """
+    if not address:
         return None
 
     try:
-        location = geocode(addr_str)
-
-        # If the location is not found, return None
-        if not location:
-            return None
-
-        return location
-
-        """ addr = location.raw.get("address", {})
-
-        # 1) Look for any ISO3166-2* field (works for all countries Nominatim supports)
-        for key, value in addr.items():
-            if key.lower().startswith("iso3166-2") and value:
-                return value
-
-        # 2) Fallback: just return 2-letter country code (not 3166-2, but still useful)
-        country_code = addr.get("country_code")
-        if country_code:
-            return country_code.upper()
-
-        return None """
-
+        results = geocoder.geocode(address)
     except Exception as e:
-        st.error(f"Error geocoding address: {e}")
+        print(f"OpenCage error: {e}")
         return None
+
+    if not results:
+        return None
+
+    return results[0]
+
+    """ comp = results[0].get("components", {})
+
+    # Example: ['DE-BY', 'DE'] or ['DE-BE']
+    iso_list = comp.get("ISO_3166-2")
+
+    if isinstance(iso_list, list) and len(iso_list) > 0:
+        # Prefer the subdivision code (the one with a dash)
+        for code in iso_list:
+            if "-" in code:
+                return code
+        return iso_list[0]
+
+    # Fallback: return country code only
+    return comp.get("country_code", "").upper() or None """
+
 
 
 
@@ -123,28 +116,11 @@ if uploaded_file is not None:
         # Test function to send a test address to address_to_iso_subdivision
 
         test_address = "1600 Amphitheatre Parkway, Mountain View, CA"
-
-        outPutAdress = address_to_iso_subdivision(test_address)
-
-        st.write(f"Object: {outPutAdress}")
-
-        st.write(f"JSON: {outPutAdress.raw}")
-
-        addr = outPutAdress.raw.get("address", {})
-
-        st.write(f"Adress: {outPutAdress.raw}")
-
-        test_address = "Mitterfeldstr. 3 Petershausen"
-
-        outPutAdress = address_to_iso_subdivision(test_address)
+        outPutAdress = address_to_iso_3166_2_opencage(test_address)
 
         st.write(f"Object: {outPutAdress}")
 
-        st.write(f"JSON: {outPutAdress.raw}")
-
-        addr = outPutAdress.raw.get("address", {})
-
-        st.write(f"Adress: {outPutAdress.raw}")
+        
 
         st.success("✅ Transformations applied successfully!")
 
