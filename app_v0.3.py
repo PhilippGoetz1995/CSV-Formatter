@@ -125,7 +125,9 @@ if uploaded_file is not None:
 
         outPutAdress = address_to_iso_subdivision(test_address)
 
-        st.write(f"Test address: {outPutAdress}")
+        st.write(f"Object: {outPutAdress}")
+
+        st.write(f"JSON: {outPutAdress.raw}")
 
         st.success("✅ Transformations applied successfully!")
 
