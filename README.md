@@ -62,7 +62,7 @@ python -m streamlit run app_v1.0.0.py
 ## 📅 Version History
 
 <details>
-<summary><strong>v1.0.0</strong> – 14.11.2025</summary>
+<summary><strong>v1.0.0</strong> – 15.11.2025</summary>
 
 - 🔧 Fixed some smaller issues with the Adress Mapping
 
