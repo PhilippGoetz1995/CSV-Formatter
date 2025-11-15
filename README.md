@@ -40,6 +40,10 @@ Tool for Uploading a CSV & Formatting it => then download a cleaned CSV:
 ### Backend
 - AWS EC2 Instance
 
+### CI/CD Workflow
+* Github Action Workflow on push to main
+* Upload to EC2 Instance
+
 <br>
 
 ## 🔧 How To Use
