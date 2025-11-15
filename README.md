@@ -6,7 +6,7 @@
 <h4 align="center">📦 P-Goetz CSV Formatter</h4>
 
 <p align="center">
-  <a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/Version-1.0.1-blue"></a>
+  <a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/Version-1.0.0-blue"></a>
   <a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/Author-Philipp_Goetz-yellow"></a>
   <a href="https://p-goetz.de/"><img src="https://img.shields.io/badge/uptime-100%25-brightgreen"></a>
 
@@ -23,49 +23,50 @@
 
 ---
 
-This is a CSV Formatter Tool
+Tool for Uploading a CSV & Formatting it => then download a cleaned CSV:
+- Numbers → configurable separators & decimal places
+- Dates → normalized to **YYYY-MM-DD**
+- Phone numbers → normalized to **E.164** (`+491701234567`)
+- Addresses → extract **ISO-3166-2** codes (e.g., `US-CA`, `DE-BY`)
 
 ---
 
-# 🏗️ Architecture
+<!-- GETTING STARTED -->
+## 🏗️ Architecture
 
-TBD
+### Frontend
+- Python Streamlit & Pandas
 
-## Frontend => React
-- **Technology**: -
-- **Styling**: -
-
-## Technical Flow
-1. -
+### Backend
+- AWS EC2 Instance
 
 <br>
 
-# 🚀 Key Features
-
-- ✅-
-
-# 🧪 Roadmap
-- 🔜 Coming Soon: for now nothing on the Roadmap
-
-<br>
-
-# 🔧 How To Use
+## 🔧 How To Use
 
 ## Commands
 
 ```bash
-python -m streamlit run app.py
+# Start streamlit Application
+python -m streamlit run app_v1.0.0.py
 ```
 
 <br>
 
-# 🤬 Hints to not cry everytime
+### 🤬 Hints to not cry everytime
 
 - ...
 
 <br>
 
 # 📅 Version History
+
+<details>
+<summary><strong>v1.0.0</strong> – 14.11.2025</summary>
+
+- 🔧 Fixed some smaller issues with the Adress Mapping
+
+</details>
 
 <details>
 <summary><strong>v0.0.1</strong> – 14.11.2025</summary>
