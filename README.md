@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#hints-to-not-cry-everytime">Hints</a>
+  <a href="#-Architecture">Architecture</a> •
+  <a href="#-how-to-use">How To Use</a> •
+  <a href="#-hints-to-not-cry-everytime">Hints</a>
 </p>
 
 <!-- Screenshot is optional -->
@@ -53,13 +53,13 @@ python -m streamlit run app_v1.0.0.py
 
 <br>
 
-### 🤬 Hints to not cry everytime
+## 🤬 Hints to not cry everytime
 
 - ...
 
 <br>
 
-# 📅 Version History
+## 📅 Version History
 
 <details>
 <summary><strong>v1.0.0</strong> – 14.11.2025</summary>
